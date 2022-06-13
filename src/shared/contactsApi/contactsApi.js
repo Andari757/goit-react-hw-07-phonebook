@@ -1,8 +1,11 @@
+import axios from "axios";
 
-import instance from "shared/authApi/authApi";
-import { addToken } from "shared/authApi/authApi"
-export const getContacts = async (token) => {
-    addToken(token)
+const instance = axios.create({
+    baseURL: "https://62a6d79c97b6156bff8086f5.mockapi.io/"
+});
+
+
+export const getContacts = async () => {
     const { data } = await instance.get('/contacts');
     return data;
 };

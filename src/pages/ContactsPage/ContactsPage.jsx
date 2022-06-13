@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import ContactList from 'components/ContactList/ContactList';
 import ContactForm from 'components/ContactForm/ContactForm';
 import Filter from "components/Filter/Filter";
-import UserMenu from 'components/UserMenu/UserMenu';
 import { getContacts, getLoading } from 'redux/contacts/contacts-selectors';
 import {
     fetchContacts,
@@ -13,17 +12,15 @@ import {
 } from "redux/contacts/contacts-operations";
 import s from "./style.module.css"
 import { TailSpin } from 'react-loader-spinner';
-import { getToken } from 'redux/auth/auth-selectors';
 export default function ContactsPage() {
-    const [filter, setFilter] = useState("");
-    const loading = useSelector(getLoading)
-    const dispatch = useDispatch();
-    const token = useSelector(getToken)
 
+    const [filter, setFilter] = useState("");
+    const dispatch = useDispatch();
+    const loading = useSelector(getLoading)
+    const contacts = useSelector(getContacts)
     useEffect(() => {
-        dispatch(fetchContacts(token))
-    }, [dispatch, token])
-    const contacts = useSelector(getContacts);
+        dispatch(fetchContacts())
+    }, [dispatch])
     const addContact = (data) => {
         if (contacts.find(contact => contact.name === data.name)) {
             alert(`${data.name} already exists`)
@@ -53,7 +50,6 @@ export default function ContactsPage() {
     const data = getFilteredContacts()
     return (
         <div className={s.page}>
-            <UserMenu />
 
             <div className={s.phoneBook}>
                 <h1>Phonebook</h1>

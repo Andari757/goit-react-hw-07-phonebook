@@ -4,9 +4,9 @@ import { getContacts, pushContact, deleteContact } from 'shared/contactsApi/cont
 
 export const fetchContacts = createAsyncThunk(
     'contacts/fetchContacts',
-    async (token, { rejectWithValue }) => {
+    async (_, { rejectWithValue }) => {
         try {
-            const data = await getContacts(token);
+            const data = await getContacts();
             return data;
         } catch (error) {
             return rejectWithValue(error.message);

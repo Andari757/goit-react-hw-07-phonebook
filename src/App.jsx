@@ -1,59 +1,66 @@
-import { useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux';
-import { getContacts } from 'redux/selectors';
-import { actions } from 'redux/slice';
-import ContactList from 'components/ContactList/ContactList';
-import ContactForm from 'components/ContactForm/ContactForm';
-import Filter from "components/Filter/Filter"
+
+import { Routes, Route, Navigate } from "react-router-dom";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+
+
+import ContactsPage from 'pages/ContactsPage/ContactsPage';
+import LoginPage from 'pages/LoginPage/LoginPage';
+import PublicRoute from 'shared/components/PublicRoute/PublicRoute';
+import PrivateRoute from 'shared/components/PrivateRoute/PrivateRoute';
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { getCurrentUser } from "redux/auth/auth-operations";
+import RegisterPage from "pages/RegisterPage/RegisterPage";
 export function App() {
-  const [filter, setFilter] = useState("");
-  const items = useSelector(getContacts)
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getCurrentUser());
+  }, [dispatch]);
+  // const location = useLocation();
+
+  // const navigate = useNavigate();
+
+  // useEffect(() => {
 
 
-  const addContact = (data) => {
-    if (items.find(contact => contact.name === data.name)) {
-      alert(`${data.name} already exists`)
-      return;
-    }
-    const action = actions.addContact(data);
-    dispatch(action);
-  }
+  //   if (!isLoggedIn && !(location.pathname.startsWith('/login') || location.pathname.startsWith('/register'))) {
+  //     navigate("/login");
+  //   }
+  //   if (isLoggedIn && (location.pathname.startsWith('/login') || location.pathname.startsWith('/register'))) {
+  //     navigate("/contacts");
+  //   }
+  // }, [isLoggedIn, location.pathname, navigate]);
 
-  function getFilteredContacts() {
-    if (!filter) {
-      return items;
-    }
-    return items.filter(({ name }) => name.toLowerCase().includes(filter.toLowerCase()))
-  }
 
-  const filterContacts = (e) => {
-    setFilter(e.target.value)
-  }
 
-  const remove = (data) => {
-    const action = actions.removeContact(data);
-    dispatch(action);
-  }
-
-  const data = getFilteredContacts()
   return (
-    <div className="app">
-      <div className="phone-book">
-        <h1>Phonebook</h1>
-        <ContactForm
-          onSubmit={addContact}
-        />
-        <h2>Contacts</h2>
-        <Filter
-          onChange={filterContacts}
-          value={filter} />
-        <ContactList
-          contacts={data}
-          onClick={remove}
-        />
-      </div>
-    </div >
+
+    <Routes>
+      <Route element={<PublicRoute />}>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+      </Route>
+
+      <Route element={<PrivateRoute />}>
+        <Route path="/contacts" element={<ContactsPage />} />
+      </Route>
+      <Route path="*" element={<Navigate to="/login" replace />} />
+    </Routes>
+
+
+
+
+
+
+
+
+    // <Routes>
+    //   {isLoggedIn && <Route path="/contacts" element={<ContactsPage />} />}
+    //   {!isLoggedIn && <Route path="/register" element={<RegisterPage />} />}
+    //   {!isLoggedIn && <Route path="/login" element={<LoginPage />} />}
+    //   <Route path="*" element={<Navigate to={defaultRoute} />} />
+    // </Routes>
   )
 
 }

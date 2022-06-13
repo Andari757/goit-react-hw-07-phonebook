@@ -1,0 +1,17 @@
+.page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.phoneBook {
+    width: 450px;
+    background-color: #ccc;
+    padding: 30px;
+}
+
+.loader {
+    display: flex;
+    justify-content: center;
+}

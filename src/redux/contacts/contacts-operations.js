@@ -14,18 +14,54 @@ export const fetchContacts = createAsyncThunk(
     }
 );
 
+// export const addContact = createAsyncThunk(
+//     'contacts/addContact',
+//     async (data, { rejectWithValue }) => {
+//         try {
+//             const contact = await pushContact(data);
+//             return contact;
+//         } catch (error) {
+//             return rejectWithValue(error.message);
+//         }
+//     },
+//     {
+//         condition: (data, { getContacts }) => {
+//             console.log(data)
+//             const contacts = getContacts();
+//             console.log(contacts)
+//             const dublicate = contacts.find(item => item.name === data.name);
+//             if (dublicate) {
+//                 alert(`${data.name} already exist`);
+//                 return false;
+//             }
+//             return data;
+//         }
+//     }
+// );
+
 export const addContact = createAsyncThunk(
-    'contacts/addContact',
+    "contacts/addContact",
     async (data, { rejectWithValue }) => {
         try {
-            const contact = await pushContact(data);
-            return contact;
+            const newContact = pushContact(data);
+            return newContact;
         } catch (error) {
-            return rejectWithValue(error.message);
+            return rejectWithValue(error);
         }
     },
+    {
+        condition: (data, { getState }) => {
+            const { contacts } = getState();
+            const dublicate = contacts.items.find(item => item.name === data.name);
+            if (dublicate) {
+                alert(`${data.name}  already exist`);
+                return false;
+            }
+            return data;
+        },
+    }
+)
 
-);
 
 export const removeContact = createAsyncThunk(
     'contacts/removeContact',

@@ -22,10 +22,10 @@ export default function ContactsPage() {
         dispatch(fetchContacts())
     }, [dispatch])
     const addContact = (data) => {
-        if (contacts.find(contact => contact.name === data.name)) {
-            alert(`${data.name} already exists`)
-            return;
-        }
+        // if (contacts.find(contact => contact.name === data.name)) {
+        //     alert(`${data.name} already exists`)
+        //     return;
+        // }
         dispatch(addContactAction(data));
     }
 
